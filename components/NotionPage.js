@@ -34,28 +34,32 @@ const NotionPage = ({ post, className }) => {
     if (presstimeout.current) clearTimeout(presstimeout.current)
     if (longpress) setLongpress(false)
   }
-  const zoom =
-    isBrowser &&
-    mediumZoom({
-      //   container: '.notion-viewport',
-      background: 'rgba(0, 0, 0, 0.2)',
-      margin: getMediumZoomMargin()
-    })
 
-  const zoomRef = useRef(zoom ? zoom.clone() : null)
+  const zoomRef = useRef(null)
   const IMAGE_ZOOM_IN_WIDTH = siteConfig('IMAGE_ZOOM_IN_WIDTH', 1200)
+
   // 页面首次打开时执行的勾子
   useEffect(() => {
+    if (!isBrowser) return
+
+    // mediumZoom 初始化
+    const zoom = mediumZoom({
+      background: 'rgba(0,0,0,0.2)',
+      margin: getMediumZoomMargin()
+    })
+    zoomRef.current = zoom.clone()
+
     // 检测当前的url并自动滚动到对应目标
     autoScrollToHash()
   }, [])
 
   // 页面文章发生变化时会执行的勾子
   useEffect(() => {
+    if (!isBrowser) return
+
     // 相册视图点击禁止跳转，只能放大查看图片
     if (POST_DISABLE_GALLERY_CLICK) {
-      // 针对页面中的gallery视图，点击后是放大图片还是跳转到gallery的内部页面
-      processGalleryImg(zoomRef?.current)
+      processGalleryImg(zoomRef.current)
     }
 
     // 页内数据库点击禁止跳转，只能查看
@@ -66,19 +70,16 @@ const NotionPage = ({ post, className }) => {
     /**
      * 放大查看图片时替换成高清图像
      */
-    const observer = new MutationObserver((mutationsList, observer) => {
+    const observer = new MutationObserver((mutationsList) => {
       mutationsList.forEach(mutation => {
         if (
           mutation.type === 'attributes' &&
           mutation.attributeName === 'class'
         ) {
           if (mutation.target.classList.contains('medium-zoom-image--opened')) {
-            // 等待动画完成后替换为更高清的图像
             setTimeout(() => {
-              // 获取该元素的 src 属性
-              const src = mutation?.target?.getAttribute('src')
-              //   替换为更高清的图像
-              mutation?.target?.setAttribute(
+              const src = mutation.target.getAttribute('src')
+              mutation.target.setAttribute(
                 'src',
                 compressImage(src, IMAGE_ZOOM_IN_WIDTH)
               )
@@ -88,19 +89,19 @@ const NotionPage = ({ post, className }) => {
       })
     })
 
-    // 监视页面元素和属性变化
     observer.observe(document.body, {
       attributes: true,
       subtree: true,
       attributeFilter: ['class']
     })
 
-    return () => {
-      observer.disconnect()
-    }
+    return () => observer.disconnect()
   }, [post])
 
+  // Spoiler文本 + 禁止右键/选中/复制 + 删除 notion page properties
   useEffect(() => {
+    if (!isBrowser) return
+
     // Spoiler文本功能
     if (SPOILER_TEXT_TAG) {
       import('lodash/escapeRegExp').then(escapeRegExp => {
@@ -114,41 +115,28 @@ const NotionPage = ({ post, className }) => {
       })
     }
 
-    useEffect(() => {
-      const handleContextMenu = (e) => e.preventDefault()
-      const handleSelectStart = (e) => e.preventDefault()
-      const handleCopy = (e) => e.preventDefault()
+    // 禁止右键、选中、复制
+    const handleContextMenu = (e) => e.preventDefault()
+    const handleSelectStart = (e) => e.preventDefault()
+    const handleCopy = (e) => e.preventDefault()
 
-      document.addEventListener('contextmenu', handleContextMenu)
-      document.addEventListener('selectstart', handleSelectStart)
-      document.addEventListener('copy', handleCopy)
+    document.addEventListener('contextmenu', handleContextMenu)
+    document.addEventListener('selectstart', handleSelectStart)
+    document.addEventListener('copy', handleCopy)
 
-      return () => {
-        document.removeEventListener('contextmenu', handleContextMenu)
-        document.removeEventListener('selectstart', handleSelectStart)
-        document.removeEventListener('copy', handleCopy)
-      }
-    }, [])
-
-    // 查找所有具有 'notion-collection-page-properties' 类的元素,删除notion自带的页面properties
+    // 查找并删除 Notion 自带的页面properties
     const timer = setTimeout(() => {
-      // 查找所有具有 'notion-collection-page-properties' 类的元素
-      const elements = document.querySelectorAll(
-        '.notion-collection-page-properties'
-      )
+      document.querySelectorAll('.notion-collection-page-properties')
+        .forEach(el => el.remove())
+    }, 1000)
 
-      // 遍历这些元素并将其从 DOM 中移除
-      elements?.forEach(element => {
-        element?.remove()
-      })
-    }, 1000) // 1000 毫秒 = 1 秒
-
-    // 清理定时器，防止组件卸载时执行
-    return () => clearTimeout(timer)
+    return () => {
+      document.removeEventListener('contextmenu', handleContextMenu)
+      document.removeEventListener('selectstart', handleSelectStart)
+      document.removeEventListener('copy', handleCopy)
+      clearTimeout(timer)
+    }
   }, [post])
-
-  // const cleanBlockMap = cleanBlocksWithWarn(post?.blockMap);
-  // console.log('NotionPage render with post:', post);
 
   return (
     <div
@@ -214,12 +202,11 @@ const processGalleryImg = zoom => {
  * 根据url参数自动滚动到锚位置
  */
 const autoScrollToHash = () => {
+  if (!isBrowser) return
   setTimeout(() => {
-    // 跳转到指定标题
-    const hash = window?.location?.hash
+    const hash = window.location.hash
     const needToJumpToTitle = hash && hash.length > 0
     if (needToJumpToTitle) {
-      console.log('jump to hash', hash)
       const tocNode = document.getElementById(hash.substring(1))
       if (tocNode && tocNode?.className?.indexOf('notion') > -1) {
         tocNode.scrollIntoView({ block: 'start', behavior: 'smooth' })
@@ -234,7 +221,6 @@ const autoScrollToHash = () => {
  * @returns
  */
 const mapPageUrl = id => {
-  // return 'https://www.notion.so/' + id.replace(/-/g, '')
   return '/' + id.replace(/-/g, '')
 }
 
@@ -243,6 +229,7 @@ const mapPageUrl = id => {
  * @returns
  */
 function getMediumZoomMargin() {
+  if (!isBrowser) return 24 // SSR 默认值
   const width = window.innerWidth
 
   if (width < 500) {

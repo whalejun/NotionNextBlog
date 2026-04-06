@@ -47,7 +47,7 @@ export default function ArticleDetail(props) {
               post?.type &&
               !post?.type !== 'Page' &&
               post?.pageCover && (
-                <div className='w-full relative md:flex-shrink-0 overflow-hidden rounded-t-sm'>
+                <div className='w-full relative md:flex-shrink-0 overflow-hidden'>
                   <LazyImage
                     alt={post.title}
                     src={post?.pageCover}

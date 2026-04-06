@@ -15,6 +15,7 @@ import { createContext, useContext, useEffect, useRef } from 'react'
 import ArticleDetail from './components/ArticleDetail'
 import ArticleLock from './components/ArticleLock'
 import AsideLeft from './components/AsideLeft'
+import Announcement from './components/Announcement'
 import BlogListPage from './components/BlogListPage'
 import BlogListScroll from './components/BlogListScroll'
 import BlogArchiveItem from './components/BlogPostArchive'
@@ -103,10 +104,11 @@ const LayoutBase = props => {
 /**
  * 首页
  * @param {*} props notion数据
- * @returns 首页就是一个博客列表
+ * @returns 首页显示公告内容，不显示博客列表
  */
 const LayoutIndex = props => {
-  return <LayoutPostList {...props} />
+  const { notice } = props
+  return <Announcement post={notice} />
 }
 
 /**

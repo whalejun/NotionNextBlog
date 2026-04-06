@@ -7,7 +7,6 @@ import CONFIG from '@/themes/fukasawa/config'
 import { debounce } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
-import Announcement from './Announcement'
 import Catalog from './Catalog'
 import GroupCategory from './GroupCategory'
 import GroupTag from './GroupTag'
@@ -149,11 +148,6 @@ function AsideLeft(props) {
         <section className='flex flex-col text-gray-600'>
           <div className='w-12 my-4' />
           <SearchInput {...props} />
-        </section>
-
-        <section className='flex flex-col dark:text-gray-300'>
-          <div className='w-12 my-4' />
-          <Announcement post={notice} />
         </section>
 
         <section>

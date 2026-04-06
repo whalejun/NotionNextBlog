@@ -27,7 +27,7 @@ export default function ArticleDetail(props) {
   return (
     <div
       id='container'
-      className={`${fullWidth ? 'px-10' : 'max-w-5xl '} overflow-x-auto flex-grow mx-auto w-screen md:w-[95%]`}>
+      className={`${fullWidth ? 'px-10' : 'max-w-5xl '} overflow-x-auto flex-grow mx-auto w-screen md:w-full`}>
       {post?.type && !post?.type !== 'Page' && post?.pageCover && (
         <div className='w-full relative md:flex-shrink-0 overflow-hidden rounded-t'>
           <LazyImage

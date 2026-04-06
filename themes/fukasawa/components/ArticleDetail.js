@@ -97,7 +97,7 @@ export default function ArticleDetail(props) {
         </header>
 
         {/* Notion文章主体 */}
-        <section id='article-wrapper'>
+        <section id='article-wrapper' className="mx-auto max-w-[750px]">
           {post && <NotionPage post={post} />}
         </section>
 
@@ -110,10 +110,10 @@ export default function ArticleDetail(props) {
 
       {post?.type === 'Post' && <ArticleAround prev={prev} next={next} />}
 
-      {/* 评论互动 */}
-      <div className='duration-200 shadow py-6 px-12 w-screen md:w-full overflow-x-auto dark:border-gray-700 bg-white dark:bg-hexo-black-gray mt-4'>
+      {/* 不显示评论互动 */}
+      {/* <div className='duration-200 shadow py-6 px-12 w-screen md:w-full overflow-x-auto dark:border-gray-700 bg-white dark:bg-hexo-black-gray mt-4'>
         <Comment frontMatter={post} />
-      </div>
+      </div> */}
     </div>
   )
 }

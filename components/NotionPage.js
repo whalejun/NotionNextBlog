@@ -19,6 +19,21 @@ const NotionPage = ({ post, className }) => {
   const POST_DISABLE_DATABASE_CLICK = siteConfig('POST_DISABLE_DATABASE_CLICK')
   const SPOILER_TEXT_TAG = siteConfig('SPOILER_TEXT_TAG')
 
+  // 长按状态
+  const [longpress, setLongpress] = useState(false)
+  const presstimeout = useRef(null)
+
+  const handleMouseDown = (event) => {
+    presstimeout.current = setTimeout(() => {
+      setLongpress(true)
+      event.preventDefault() // 长按禁止默认行为
+    }, 500) // 500ms 阈值
+  }
+
+  const handleMouseUp = () => {
+    if (presstimeout.current) clearTimeout(presstimeout.current)
+    if (longpress) setLongpress(false)
+  }
   const zoom =
     isBrowser &&
     mediumZoom({
@@ -98,6 +113,22 @@ const NotionPage = ({ post, className }) => {
         })
       })
     }
+
+    useEffect(() => {
+      const handleContextMenu = (e) => e.preventDefault()
+      const handleSelectStart = (e) => e.preventDefault()
+      const handleCopy = (e) => e.preventDefault()
+
+      document.addEventListener('contextmenu', handleContextMenu)
+      document.addEventListener('selectstart', handleSelectStart)
+      document.addEventListener('copy', handleCopy)
+
+      return () => {
+        document.removeEventListener('contextmenu', handleContextMenu)
+        document.removeEventListener('selectstart', handleSelectStart)
+        document.removeEventListener('copy', handleCopy)
+      }
+    }, [])
 
     // 查找所有具有 'notion-collection-page-properties' 类的元素,删除notion自带的页面properties
     const timer = setTimeout(() => {

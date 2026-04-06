@@ -71,7 +71,7 @@ const LayoutBase = props => {
             className='relative flex w-full py-8 justify-center bg-day dark:bg-night'>
             <div
               id='container-inner'
-              className={`${fullWidth ? '' : '2xl:max-w-6xl'} w-full relative z-10`}>
+              className={`${fullWidth ? '' : '2xl:max-w-6xl md:max-w-4xl'} w-full relative z-10`}>
               <Transition
                 show={!onLoading}
                 appear={true}

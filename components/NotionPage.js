@@ -18,21 +18,6 @@ const NotionPage = ({ post, className }) => {
   const POST_DISABLE_GALLERY_CLICK = siteConfig('POST_DISABLE_GALLERY_CLICK')
   const POST_DISABLE_DATABASE_CLICK = siteConfig('POST_DISABLE_DATABASE_CLICK')
   const SPOILER_TEXT_TAG = siteConfig('SPOILER_TEXT_TAG')
-  // 长按状态
-  const [longpress, setLongpress] = useState(false)
-  const presstimeout = useRef(null)
-
-  const handleMouseDown = (event) => {
-    presstimeout.current = setTimeout(() => {
-      setLongpress(true)
-      event.preventDefault() // 长按禁止默认行为
-    }, 500) // 500ms 阈值
-  }
-
-  const handleMouseUp = () => {
-    if (presstimeout.current) clearTimeout(presstimeout.current)
-    if (longpress) setLongpress(false)
-  }
 
   const zoom =
     isBrowser &&
@@ -134,27 +119,10 @@ const NotionPage = ({ post, className }) => {
   // const cleanBlockMap = cleanBlocksWithWarn(post?.blockMap);
   // console.log('NotionPage render with post:', post);
 
-  // 禁止右键、禁止选中、禁止复制
-  useEffect(() => {
-    const handleContextMenu = (e) => e.preventDefault()
-    const handleSelectStart = (e) => e.preventDefault()
-    const handleCopy = (e) => e.preventDefault()
-
-    document.addEventListener('contextmenu', handleContextMenu)
-    document.addEventListener('selectstart', handleSelectStart)
-    document.addEventListener('copy', handleCopy)
-
-    return () => {
-      document.removeEventListener('contextmenu', handleContextMenu)
-      document.removeEventListener('selectstart', handleSelectStart)
-      document.removeEventListener('copy', handleCopy)
-    }
-  }, [])
-
   return (
     <div
       id='notion-article'
-      className={`mx-auto overflow-hidden w-full max-w-[750px] ${className || ''}`}>
+      className={`mx-auto overflow-hidden ${className || ''}`}>
       <NotionRenderer
         recordMap={post?.blockMap}
         mapPageUrl={mapPageUrl}

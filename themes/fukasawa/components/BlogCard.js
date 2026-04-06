@@ -47,7 +47,7 @@ const {siteInfo} =useGlobal()
     <article
       {...aosProps}
       style={{ maxHeight: '60rem' }}
-      className='w-full lg:max-w-sm p-3 shadow mx-2 bg-white dark:bg-hexo-black-gray hover:shadow-lg duration-200 rounded'>
+      className='w-full lg:max-w-sm p-3 shadow mb-4 mx-2 bg-white dark:bg-hexo-black-gray hover:shadow-lg duration-200'>
       <div className='flex flex-col justify-between h-full'>
         {/* 封面图 */}
         {showPageCover && (

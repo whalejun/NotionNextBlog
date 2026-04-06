@@ -201,7 +201,7 @@
 }
 
 .medium-zoom-image {
-  border-radius: 0.25rem;
+  border-radius: 0;
 }
 
 .medium-zoom-image--opened {

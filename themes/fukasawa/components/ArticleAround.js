@@ -7,11 +7,9 @@ import SmartLink from '@/components/SmartLink'
  */
 export default function ArticleAround ({ prev, next }) {
   if (!prev || !next) {
-    // 去除下上一篇，下一篇文章
-    // return <></>
+    return <></>
   }
   return (
-    // 去除下上一篇，下一篇文章
     <section className='text-gray-800 h-28 flex items-center justify-between space-x-5 my-4'>
       <SmartLink
         href={`/${prev.slug}`}

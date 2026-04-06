@@ -33,7 +33,7 @@ export default function ArticleDetail(props) {
           <LazyImage
             alt={post.title}
             src={post?.pageCover}
-            className='object-cover max-h-[60vh] w-full'
+            className='object-cover max-h-[30vh] w-full'
           />
         </div>
       )}
@@ -41,8 +41,8 @@ export default function ArticleDetail(props) {
       <article
         itemScope
         itemType='https://schema.org/Movie'
-        className='subpixel-antialiased overflow-y-hidden py-10 px-5 lg:pt-24 md:px-32  dark:border-gray-700 bg-white dark:bg-hexo-black-gray'>
-        <header>
+        className='subpixel-antialiased overflow-y-hidden py-10 px-5 lg:pt-12 dark:border-gray-700 bg-white dark:bg-hexo-black-gray rounded'>
+        <header className="w-full mx-auto max-w-[750px]">
           {/* 文章Title */}
           <div className='font-bold text-4xl text-black dark:text-white'>
             {siteConfig('POST_TITLE_ICON') && (
@@ -111,7 +111,7 @@ export default function ArticleDetail(props) {
       {post?.type === 'Post' && <ArticleAround prev={prev} next={next} />}
 
       {/* 评论互动 */}
-      <div className='duration-200 shadow py-6 px-12 w-screen md:w-full overflow-x-auto dark:border-gray-700 bg-white dark:bg-hexo-black-gray'>
+      <div className='duration-200 shadow py-6 px-12 w-screen md:w-full overflow-x-auto dark:border-gray-700 bg-white dark:bg-hexo-black-gray mt-4'>
         <Comment frontMatter={post} />
       </div>
     </div>

@@ -7,7 +7,7 @@ import SmartLink from '@/components/SmartLink'
  */
 export default function ArticleAround ({ prev, next }) {
   if (!prev || !next) {
-    return <></>
+    return null;
   }
   return (
     <section className='text-gray-800 h-28 flex items-center justify-between space-x-5 my-4'>

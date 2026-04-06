@@ -4,7 +4,7 @@ import { isBrowser, loadExternalResource } from '@/lib/utils'
 import mediumZoom from '@fisch0920/medium-zoom'
 import 'katex/dist/katex.min.css'
 import dynamic from 'next/dynamic'
-import { useEffect, useRef } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { NotionRenderer } from 'react-notion-x'
 
 /**

@@ -53,12 +53,11 @@ const BlogListScroll = ({ posts }) => {
 
   // 根据当前页和每页文章数截取应该显示的文章
   useEffect(() => {
-    const startIndex = (page - 1) * postsPerPage;
-    const endIndex = startIndex + postsPerPage;
-    const postsToShow = safePosts.slice(startIndex, endIndex);
+    const endIndex = page * postsPerPage;
+    const postsToShow = safePosts.slice(0, endIndex);
     const columns = 3; // 假设有3列
 
-    // 重新排列文章，保证列优先顺序
+    // 重新排列文章，保证纵向排列看起来更像横向排列
     const newFilterPosts = [];
     for (let col = 0; col < columns; col++) {
       for (let i = col; i < postsToShow.length; i += columns) {
@@ -66,8 +65,8 @@ const BlogListScroll = ({ posts }) => {
       }
     }
 
-    setFilterPostsGroups((prev) => [...prev, newFilterPosts]);
-  }, [posts, page]);
+    setFilterPostsGroups([newFilterPosts]);
+  }, [safePosts, page, postsPerPage]);
 
   if (safePosts.length === 0) {
     return <BlogPostListEmpty />;

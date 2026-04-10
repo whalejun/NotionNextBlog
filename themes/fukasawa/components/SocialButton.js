@@ -181,6 +181,15 @@ const SocialButton = () => {
             </div>
           </button>
         )}
+        {CONTACT_MAOXIANG && (
+          <a
+            target='_blank'
+            rel='noreferrer'
+            title='fedibird'
+            href={CONTACT_MAOXIANG}>
+            <i className='transform hover:scale-125 duration-150 fas fa-mastodon dark:hover:text-green-400 hover:text-green-600' />
+          </a>
+        )}
       </div>
     </div>
   )

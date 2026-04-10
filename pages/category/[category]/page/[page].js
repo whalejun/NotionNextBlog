@@ -61,7 +61,7 @@ export async function getStaticPaths() {
       ?.filter(page => page.type === 'Post' && page.status === 'Published')
       .filter(
         post => post && post.category && post.category.includes(category.name)
-      )
+      ) || []
     // 处理文章页数
     const postCount = categoryPosts.length
     const totalPages = Math.ceil(

@@ -17,8 +17,8 @@ export async function getStaticPaths({ locale }) {
   const from = 'page-paths'
   const { postCount, NOTION_CONFIG } = await fetchGlobalAllData({ from, locale })
   const totalPages = Math.ceil(
-    postCount / siteConfig('POSTS_PER_PAGE', null, NOTION_CONFIG)
-  )
+    (postCount || 0) / siteConfig('POSTS_PER_PAGE', null, NOTION_CONFIG)
+  ) || 0
   return {
     // remove first page, we 're not gonna handle that.
     paths: Array.from({ length: totalPages - 1 }, (_, i) => ({
@@ -38,9 +38,8 @@ export async function getStaticProps({ params: { page }, locale }) {
     props?.NOTION_CONFIG
   )
 
-  const allPosts = allPages?.filter(
-    page => page.type === 'Post' && page.status === 'Published'
-  )
+  const allPosts =
+    allPages?.filter(page => page.type === 'Post' && page.status === 'Published') || []
   const POSTS_PER_PAGE = siteConfig('POSTS_PER_PAGE', 12, props?.NOTION_CONFIG)
   // 处理分页
   props.posts = allPosts.slice(

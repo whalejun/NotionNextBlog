@@ -11,11 +11,12 @@ const BlogListScroll = ({ posts }) => {
   const POSTS_PER_PAGE = siteConfig('POSTS_PER_PAGE', null, NOTION_CONFIG);
   const [filterPostsGroups, setFilterPostsGroups] = useState([]);
 
+  const safePosts = posts || [];
   // 每页显示的文章数量
-  const postsPerPage = POSTS_PER_PAGE;
+  const postsPerPage = POSTS_PER_PAGE || 1;
 
   // 计算总页数
-  const totalPages = Math.ceil(posts.length / postsPerPage);
+  const totalPages = Math.ceil(safePosts.length / postsPerPage) || 0;
 
   // 加载更多文章
   const loadMorePosts = () => {
@@ -54,7 +55,7 @@ const BlogListScroll = ({ posts }) => {
   useEffect(() => {
     const startIndex = (page - 1) * postsPerPage;
     const endIndex = startIndex + postsPerPage;
-    const postsToShow = posts.slice(startIndex, endIndex);
+    const postsToShow = safePosts.slice(startIndex, endIndex);
     const columns = 3; // 假设有3列
 
     // 重新排列文章，保证列优先顺序
@@ -68,7 +69,7 @@ const BlogListScroll = ({ posts }) => {
     setFilterPostsGroups((prev) => [...prev, newFilterPosts]);
   }, [posts, page]);
 
-  if (!posts || posts.length === 0) {
+  if (safePosts.length === 0) {
     return <BlogPostListEmpty />;
   } else {
     return (

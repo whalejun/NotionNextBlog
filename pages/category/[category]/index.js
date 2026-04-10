@@ -24,6 +24,7 @@ export async function getStaticProps({ params: { category }, locale }) {
   props.posts = props.posts.filter(
     post => post && post.category && post.category.includes(category)
   )
+  props.posts = props.posts || []
   // 处理文章页数
   props.postCount = props.posts.length
   // 处理分页
